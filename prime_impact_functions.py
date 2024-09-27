@@ -48,6 +48,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from itertools import product
+from datetime import datetime, timezone
 import re
 import random
 import math
@@ -1182,13 +1183,20 @@ def export_data(df, mdf, file_title, file_format='csv', export_metadata=False, c
     # Slice the DataFrame based on the selected columns
     df_to_save = df[selected_columns]
     
+
+    # create timestamp
+    # Get the current date and time for Coordinated Universal Time (UTC)
+    current_datetime = datetime.now(timezone.utc)
+    # Format the date and time as a string in the desired format
+    timestamp = current_datetime.strftime('%Y-%m-%d_%H:%M:%S')
+
     # Save the DataFrame to the specified format (CSV or Excel)
     if file_format == 'csv':
-        df_to_save.to_csv(f'{file_title}.csv', index=True)
+        df_to_save.to_csv(f'../{file_title}_{timestamp}.csv', index=True)
     elif file_format == 'xlsx':
-        df_to_save.to_excel(f'{file_title}.xlsx', index=True)
+        df_to_save.to_excel(f'../{file_title}_{timestamp}.xlsx', index=True)
 
-    print(f"(i) Data has been successfully saved as {file_title}.{file_format}")
+    print(f"(i) Data has been successfully saved as {file_title}_{timestamp}.{file_format}")
 
     # If metadata is to be exported, slice and save the metadata DataFrame
     if export_metadata:
@@ -1196,11 +1204,11 @@ def export_data(df, mdf, file_title, file_format='csv', export_metadata=False, c
 
         # Save the metadata to the same format as the DataFrame
         if file_format == 'csv':
-            mdf_to_save.to_csv(f'{file_title}_metadata.csv', index=True)
+            mdf_to_save.to_csv(f'../{file_title}_metadata_{timestamp}.csv', index=True)
         elif file_format == 'xlsx':
-            mdf_to_save.to_excel(f'{file_title}_metadata.xlsx', index=True)
+            mdf_to_save.to_excel(f'../{file_title}_metadata_{timestamp}.xlsx', index=True)
         
-        print(f"(i) Metadata has been successfully saved as {file_title}_metadata.{file_format}")
+        print(f"(i) Metadata has been successfully saved as {file_title}_metadata_{timestamp}.{file_format}")
 
 
 
